@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using QuizApp.Api.Features.Auth.DTOs;
+using QuizApp.Api.Features.Auth.Services;
+using QuizApp.Api.Features.Auth.Services.Interfaces;
 
 namespace QuizApp.Api.Features.Auth.Controllers;
 
@@ -6,9 +9,18 @@ namespace QuizApp.Api.Features.Auth.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    [HttpGet("test")]
-    public IActionResult Test()
+    private readonly IAuthService _authService;
+
+    public AuthController(IAuthService authService)
     {
-        return Ok("Auth API working!");
+        _authService = authService;
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterRequestDto request)
+    {
+        var response = await _authService.RegisterAsync(request);
+
+        return Ok(response);
     }
 }
