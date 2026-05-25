@@ -11,11 +11,13 @@ public class AuthService : IAuthService
 {
     private readonly ApplicationDbContext _context;
     private readonly IPasswordHasher<User> _passwordHasher;
+    private readonly IJwtService _jwtService;
 
-    public AuthService(ApplicationDbContext context, IPasswordHasher<User> passwordHasher)
+    public AuthService(ApplicationDbContext context, IPasswordHasher<User> passwordHasher, IJwtService jwtService)
     {
         _context = context;
         _passwordHasher = passwordHasher;
+        _jwtService = jwtService;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request)
@@ -46,6 +48,39 @@ public class AuthService : IAuthService
         return new AuthResponseDto
         {
             Message = "User registered successfully"
+        };
+    }
+
+    public async Task<AuthResponseDto> LoginAsync(LoginRequestDto request)
+    {
+        User? user = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
+
+        if (user is null)
+        {
+            return new AuthResponseDto
+            {
+                Message = "Invalid email or password"
+            };
+        }
+
+        var result = _passwordHasher.VerifyHashedPassword(
+            user,
+            user.PasswordHash,
+            request.Password);
+
+        if (result == PasswordVerificationResult.Failed)
+        {
+            return new AuthResponseDto
+            {
+                Message = "Invalid email or password"
+            };
+        }
+
+
+        return new AuthResponseDto
+        {
+            Message = "Login successful",
+            Token = _jwtService.GenerateToken(user)
         };
     }
 }
