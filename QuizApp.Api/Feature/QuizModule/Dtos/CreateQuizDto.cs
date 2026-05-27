@@ -1,6 +1,6 @@
 namespace QuizApp.Api.Features.QuizModule.DTOs;
 
-public class QuizDto
+public class CreateQuizDto
 {
     public string Title { get; set; } = string.Empty;
 
@@ -8,5 +8,5 @@ public class QuizDto
 
     public int DurationInMinutes { get; set; }
 
-    public List<QuestionDto> Questions { get; set; } = new();
+    public List<CreateQuestionDto> Questions { get; set; } = new();
 }

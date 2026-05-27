@@ -1,6 +1,6 @@
 namespace QuizApp.Api.Features.QuizModule.DTOs;
 
-public class OptionDto
+public class CreateOptionDto
 {
     public string OptionText { get; set; } = string.Empty;
 
