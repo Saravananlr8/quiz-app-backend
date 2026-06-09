@@ -15,7 +15,7 @@ public class QuizService : IQuizService
         _context = context;
     }
 
-    public async Task<string> CreateQuizAsync(CreateQuizDto request)
+    public async Task<object> CreateQuizAsync(CreateQuizDto request)
     {
         Quiz quiz = new Quiz
         {
@@ -50,7 +50,10 @@ public class QuizService : IQuizService
 
         await _context.SaveChangesAsync();
 
-        return "Quiz created successfully";
+        return new
+        {
+            message = "Quiz created successfully"
+        };
     }
 
     public async Task<List<GetAllQuizDto>> GetAllQuizzesAsync()
