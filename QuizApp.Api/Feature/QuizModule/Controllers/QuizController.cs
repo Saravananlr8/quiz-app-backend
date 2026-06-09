@@ -20,7 +20,7 @@ public class QuizController : ControllerBase
     {
         var response = await _quizService.CreateQuizAsync(quizDto);
         return Ok(response);
-    }
+    }           
 
     [Authorize]
     [HttpGet("quizzes")]
